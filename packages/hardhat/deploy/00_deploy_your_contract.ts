@@ -1,3 +1,5 @@
+
+
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { DEX } from "../typechain-types/contracts/DEX";
@@ -13,7 +15,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   /*
     On localhost, the deployer account is the one that comes with Hardhat, which is already funded.
 
-    When deploying to live networks (e.g `yarn deploy --network sepolia`), the deployer account
+    When deploying to live networks (e.g `yarn deploy --network goerli`), the deployer account
     should have sufficient balance to pay for the gas fees for contract creation.
 
     You can generate a random account with `yarn generate` which will fill DEPLOYER_PRIVATE_KEY
@@ -49,20 +51,20 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
   const dex = (await hre.ethers.getContract("DEX", deployer)) as DEX;
 
-  // // paste in your front-end address here to get 10 balloons on deploy:
-  // await balloons.transfer("YOUR_FRONTEND_ADDRESS", "" + 10 * 10 ** 18);
+  // paste in your front-end address here to get 10 balloons on deploy:
+  await balloons.transfer("0x46AeB00598DeE998AF2c658cBe617c9618677E62", "" + 10 * 10 ** 18);
 
-  // // uncomment to init DEX on deploy:
+  // uncomment to init DEX on deploy:
 
-  // const dexAddress = await dex.getAddress();
-  // console.log("Approving DEX (" + dexAddress + ") to take Balloons from main account...");
-  // // If you are going to the testnet make sure your deployer account has enough ETH
-  // await balloons.approve(dexAddress, hre.ethers.parseEther("100"));
-  // console.log("INIT exchange...");
-  // await dex.init(hre.ethers.parseEther("5"), {
-  //   value: hre.ethers.parseEther("5"),
-  //   gasLimit: 200000,
-  // });
+  const dexAddress = await dex.getAddress();
+  console.log("Approving DEX (" + dexAddress + ") to take Balloons from main account...");
+  // If you are going to the testnet make sure your deployer account has enough ETH
+  await balloons.approve(dexAddress, hre.ethers.parseEther("100"));
+  console.log("INIT exchange...");
+  await dex.init(hre.ethers.parseEther("0.005"), {
+    value: hre.ethers.parseEther("0.005"),
+    gasLimit: 200000,
+  });
 };
 
 export default deployYourContract;
@@ -70,3 +72,32 @@ export default deployYourContract;
 // Tags are useful if you have multiple deploy files and only want to run one of them.
 // e.g. yarn deploy --tags YourContract
 deployYourContract.tags = ["Balloons", "DEX"];
+
+
+
+
+
+
+
+
+//   // paste in your front-end address here to get 10 balloons on deploy:
+//   await balloons.transfer("0x46AeB00598DeE998AF2c658cBe617c9618677E62", "" + 10 * 10 ** 18);
+
+//   // uncomment to init DEX on deploy:
+
+//   const dexAddress = await dex.getAddress();
+//   console.log("Approving DEX (" + dexAddress + ") to take Balloons from main account...");
+//   // If you are going to the testnet make sure your deployer account has enough ETH
+//   await balloons.approve(dexAddress, hre.ethers.parseEther("100"));
+//   console.log("INIT exchange...");
+//   await dex.init(hre.ethers.parseEther("5"), {
+//     value: hre.ethers.parseEther("5"),
+//     gasLimit: 200000,
+//   });
+// };
+
+// export default deployYourContract;
+
+// // Tags are useful if you have multiple deploy files and only want to run one of them.
+// // e.g. yarn deploy --tags YourContract
+// deployYourContract.tags = ["Balloons", "DEX"];
